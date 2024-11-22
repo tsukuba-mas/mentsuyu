@@ -45,7 +45,7 @@ def generateRandomGraph(agents: int, edges: int, seed: int):
     """
     G = nx.gnm_random_graph(agents, edges, seed, directed=True)
     jsonDict = {str(i): list(G.neighbors(i)) for i in range(agents)}
-    assert all(range(agents), lambda x: 0 < len(jsonDict[str(x)]))
+    assert all([0 < len(jsonDict[str(x)]) for x in range(agents)])
     return jsonDict
 
 def generateRandomGraphJson(agents: int, edges: int, seed: int, path: str):
