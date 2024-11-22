@@ -57,3 +57,38 @@ def generateRandomGraphJson(agents: int, edges: int, seed: int, path: str):
     """
     json = generateRandomGraph(agents, edges, seed)
     dumpAsJson(path, json)
+
+
+if __name__ == "__main__":
+    import argparse
+    import os
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--agent", type=int, help="# of agents", default=100)
+    parser.add_argument("--seed", type=int, help="seed", default=42)
+    parser.add_argument("--edge", type=int, help="# of edges", default=400)
+    parser.add_argument("--atom", type=int, help="# of atoms", default=3)
+    parser.add_argument("--topic", type=str, help="topics", default="11110000")
+    parser.add_argument("--dir", type=str, help="output dir", default="")
+    parser.add_argument("--opinion", action="store_true")
+    parser.add_argument("--belief", action="store_true")
+    parser.add_argument("--graph", action="store_true")
+    args = parser.parse_args()
+
+    if not os.path.exists(args.dir):
+        os.mkdir(args.dir)
+
+    if args.opinion:
+        generateInitialOpinionsJson(
+            args.agent, args.topic.split(","), args.seed,
+            os.path.join(args.dir, f"opinions-{args.seed}.json")
+        )
+    if args.belief:
+        generateInitialBeliefsJson(
+            args.agent, args.atom, args.seed,
+            os.path.join(args.dir, f"beliefs-{args.seed}.json")
+        )
+    if args.graph:
+        generateRandomGraphJson(
+            args.agent, args.edge, args.seed,
+            os.path.join(args.dir, f"graph-{args.seed}.json")
+        )
