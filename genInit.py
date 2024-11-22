@@ -13,7 +13,7 @@ def generateInitialBeliefs(agents: int, atoms: int, seed: int) -> dict[str, str]
     """Generate initial beliefs using `atoms` atomic propositions"""
     rng = np.random.default_rng(seed)
     interpretations = pow(2, atoms) - 1  # exclude contradiction
-    beliefs = [f"{bel:b}".zfill(atoms) for bel in rng.integers(low=1, high=interpretations, size=agents)]
+    beliefs = [f"{bel:b}".zfill(atoms) for bel in rng.integers(low=1, high=interpretations, size=agents, endpoint=True)]
     return {str(i): beliefs[i] for i in range(agents)}
     
 

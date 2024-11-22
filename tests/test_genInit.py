@@ -6,8 +6,17 @@ IDS = {str(i) for i in range(AGENTS)}
 def test_generateInitialBeliefs():
     beliefs = genInit.generateInitialBeliefs(AGENTS, 2, 42)
     assert set(beliefs.keys()) == IDS
+    is01 = is10 = is11 = False
     for id in IDS:
-        assert beliefs[id] in {"01", "10", "11"}
+        if beliefs[id] == "01":
+            is01 = True
+        elif beliefs[id]== "10":
+            is10 = True
+        elif beliefs[id] == "11":
+            is11 = True
+        else:
+            assert False
+    assert is01 and is10 and is11
 
 def test_generateInitialOpinions():
     TOPICS = ["0", "1"]
