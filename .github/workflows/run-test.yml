@@ -1,0 +1,26 @@
+name: "execute test programs"
+on:
+  pull_request:
+    paths:
+      - '*.py'
+      - 'tests/**.py'
+      - '.github/workflows/run-test.yml'
+  push:
+    branches:
+      - main
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13' 
+      - name: install dependencies
+        run: pip install pytest numpy pandas scipy
+      - name: execute test programs
+        run: pytest
