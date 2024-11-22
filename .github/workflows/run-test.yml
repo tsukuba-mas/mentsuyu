@@ -21,6 +21,6 @@ jobs:
         with:
           python-version: '3.13' 
       - name: install dependencies
-        run: pip install pytest numpy pandas scipy
+        run: pip install pytest numpy pandas scipy networkx
       - name: execute test programs
         run: pytest
