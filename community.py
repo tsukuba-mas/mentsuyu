@@ -1,4 +1,5 @@
 from scipy.cluster.hierarchy import linkage, fcluster
+from typing import Callable
 
 def getBeliefBasedCommunity(bels: list[str]) -> list[set[int]]:
     """
@@ -35,6 +36,16 @@ def getOpinionBasedCommunity(ops: list[list[float]], eps: float = 0.1) -> list[s
     communities.sort(key=lambda x: len(x), reverse=True)
     return communities
 
+def find[T](xs: list[T], cond: Callable[[T], bool]) -> int:
+    """
+    Return the first index such that `cond(xs[index]) == True`.
+    If there are no such elements, `-1` is returned instead.
+    """
+    for idx, x in enumerate(xs):
+        if cond(x):
+            return idx
+    return -1
+
 def averageEdgesBetweenCommunities(coms: list[set[int]], edges: list[tuple[int, int]]) -> float:
     """
     Returns the average edges between communities.
@@ -45,7 +56,7 @@ def averageEdgesBetweenCommunities(coms: list[set[int]], edges: list[tuple[int, 
     
     cnt = 0
     for (u, v) in edges:
-        idx = coms.find(lambda com, val: val in com, u)
+        idx = find(coms, lambda com: u in com)
         if v not in coms[idx]:
             cnt += 1
     return cnt / len(coms) / (len(coms) - 1)
