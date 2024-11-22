@@ -21,7 +21,7 @@ def generateInitialBeliefsJson(agents: int, atoms: int, seed: int, path: str):
     json = generateInitialBeliefs(agents, atoms, seed)
     dumpAsJson(path, json)
 
-def generateInitialOpinions(agents: int, topics: list[str], seed: int, ub) -> dict[str, dict[str, float]]:
+def generateInitialOpinions(agents: int, topics: list[str], seed: int, ub: int = 1000000) -> dict[str, dict[str, float]]:
     """Generate initial opinions toward `topics`"""
     rng = np.random.default_rng(seed)
     jsonDict = {}
