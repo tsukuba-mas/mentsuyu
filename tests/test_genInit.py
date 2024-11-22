@@ -4,19 +4,15 @@ AGENTS = 5
 IDS = {str(i) for i in range(AGENTS)}
 
 def test_generateInitialBeliefs():
-    beliefs = genInit.generateInitialBeliefs(AGENTS, 2, 42)
-    assert set(beliefs.keys()) == IDS
-    is01 = is10 = is11 = False
-    for id in IDS:
-        if beliefs[id] == "01":
-            is01 = True
-        elif beliefs[id]== "10":
-            is10 = True
-        elif beliefs[id] == "11":
-            is11 = True
-        else:
-            assert False
-    assert is01 and is10 and is11
+    beliefs = genInit.generateInitialBeliefs(3000, 3, 42)
+    assert set(beliefs.keys()) == {str(i) for i in range(3000)}
+    hasOccured = [False] * 256
+    hasOccured[0] = True
+    for bel in beliefs.values():
+        enc = int(bel, 2)
+        assert 1 <= enc <= 255
+        hasOccured[enc] = True
+    assert all(hasOccured)
 
 def test_generateInitialOpinions():
     TOPICS = ["0", "1"]
