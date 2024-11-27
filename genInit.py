@@ -51,7 +51,7 @@ def generateRandomGraph(agents: int, edges: int, seed: int):
             b = rng.integers(0, agents)  # output an integer in [0, agents)
             if b == a:
                 continue
-            d[a].append(b)
+            d[a].append(int(b))
             break
 
     current = agents
@@ -60,7 +60,7 @@ def generateRandomGraph(agents: int, edges: int, seed: int):
         b = rng.integers(0, agents)
         if a == b or b in d[a]:
             continue
-        d[a].append(b)
+        d[a].append(int(b))
         current += 1
     
     return {str(a): d[a] for a in d}
