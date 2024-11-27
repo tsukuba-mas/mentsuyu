@@ -1,6 +1,5 @@
 import json
 import numpy as np
-import networkx as nx
 
 def dumpAsJson[T](path: str, content: dict[str, T]):
     """

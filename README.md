@@ -10,7 +10,6 @@ Install following library:
 - numpy
 - scipy
 - pandas
-- networkx
 
 ## Test programs
 Test programs are available.
