@@ -29,7 +29,8 @@ def generateInitialOpinions(agents: int, topics: list[str], seed: int, ub: int =
     for i in range(agents):
         jsonDict[str(i)] = {}
         for topic in topics:
-            jsonDict[str(i)][topic] = f"{rng.integers(low=0, high=ub)}/{ub}"
+            # Generate an integer in [0, ub]
+            jsonDict[str(i)][topic] = f"{rng.integers(low=0, high=ub, endpoint=True)}/{ub}"
     return jsonDict
     
 
