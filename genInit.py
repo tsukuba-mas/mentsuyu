@@ -41,13 +41,28 @@ def generateInitialOpinionsJson(agents: int, topics: list[str], seed: int, path:
 def generateRandomGraph(agents: int, edges: int, seed: int):
     """
     Generate initial network with `agents` nodes and `edges` edges.
-    If generated graph does not satisfy that all of the out degrees are positive (e.g., non-zero),
-    `AssertionError` will be raised.
     """
-    G = nx.gnm_random_graph(agents, edges, seed, directed=True)
-    jsonDict = {str(i): list(G.neighbors(i)) for i in range(agents)}
-    assert all([0 < len(jsonDict[str(x)]) for x in range(agents)])
-    return jsonDict
+    # To assume that 1 <= out-degree for all nodes ...
+    rng = np.random.default_rng(seed)
+    d = {a: [] for a in range(agents)}
+    for a in range(agents):
+        while True:
+            b = rng.integers(0, agents)  # output an integer in [0, agents)
+            if b == a:
+                continue
+            d[a].append(b)
+            break
+
+    current = agents
+    while current < edges:
+        a = rng.integers(0, agents)
+        b = rng.integers(0, agents)
+        if a == b or b in d[a]:
+            continue
+        d[a].append(b)
+        current += 1
+    
+    return {str(a): d[a] for a in d}
 
 def generateRandomGraphJson(agents: int, edges: int, seed: int, path: str):
     """
