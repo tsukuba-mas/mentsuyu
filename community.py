@@ -1,4 +1,5 @@
 from scipy.cluster.hierarchy import linkage, fcluster
+from scipy.spatial.distance import pdist
 from typing import Callable
 
 def getBeliefBasedCommunity(bels: list[str]) -> list[set[int]]:
@@ -17,13 +18,15 @@ def getBeliefBasedCommunity(bels: list[str]) -> list[set[int]]:
     results.sort(key=lambda x: len(x), reverse=True)
     return results
 
-def getOpinionBasedCommunity(ops: list[list[float]], eps: float = 0.1) -> list[set[int]]:
+def getOpinionBasedCommunity(ops: list[list[float]] | list[float], eps: float = 0.1) -> list[set[int]]:
     """
     Returns opinions-based communities by the set of agents' id (0-indexed).
     Each communities satisfy that the maximal distance between opinions over the members is `eps`.
     Communities are sorted with respect to the number of members in descendent order.
     """
-    id2cluster = fcluster(linkage(ops, 'ward', metric="euclidean"), t=eps, criterion="distance")
+    twodim_ops = ops if type(ops[0]) == list else [o for o in ops]
+    pdist_ops = pdist(twodim_ops, metric="euclidean")
+    id2cluster = fcluster(linkage(pdist_ops, 'ward'), t=eps, criterion="distance")
     coms = {}
     for i in range(len(ops)):
         clsid = id2cluster[i]
