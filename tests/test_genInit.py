@@ -18,10 +18,10 @@ def test_generateInitialOpinions():
     TOPICS = ["0", "1"]
     actual = genInit.generateInitialOpinions(AGENTS, TOPICS, 42)
     assert set(actual.keys()) == IDS
-    assert all([set(actual[id]) == set(TOPICS) for id in IDS])
+    assert all([len(actual[id]) == len(TOPICS) for id in IDS])
     for id in IDS:
-        for topic in TOPICS:
-            den, num = actual[id][topic].split("/")
+        for i, topic in enumerate(TOPICS):
+            den, num = actual[id][i].split("/")
             assert 0 <= int(den) <= int(num)
 
 def test_generateRandomGraph():
