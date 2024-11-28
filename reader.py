@@ -17,8 +17,9 @@ def readbel(path: str) -> pd.DataFrame:
     return makeDfColumn0origin(df)
 
 def readgr_list(path: str, tick: int) -> list[tuple[int, int]]:
-    us = linecache.getline(path, 0).split(",")
-    vs = linecache.getline(path, tick + 1).split(",")
+    # line number is 1-indexed
+    us = linecache.getline(path, 1).split(",")
+    vs = linecache.getline(path, tick + 2).split(",")
     return [(int(u), int(v)) for (u, v) in zip(us, vs)]
 
 def readgr_nx(path: str, tick: int) -> nx.DiGraph:
