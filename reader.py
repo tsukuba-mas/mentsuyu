@@ -1,6 +1,7 @@
 import pandas as pd
 import networkx as nx
 import linecache
+import os
 
 def makeDfColumn0origin(raw: pd.DataFrame) -> pd.DataFrame:
     df = raw.copy(deep=True)
@@ -18,6 +19,8 @@ def readbel(path: str) -> pd.DataFrame:
 
 def readgr_list(path: str, tick: int) -> list[tuple[int, int]]:
     # line number is 1-indexed
+    if not os.path.exists(path):
+        raise OSError(f"File {path} does not exist.")
     us = linecache.getline(path, 1).split(",")[1:] # remove tick
     vs = linecache.getline(path, tick + 2).split(",")[1:]
     return [(int(u), int(v)) for (u, v) in zip(us, vs)]
