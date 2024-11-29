@@ -27,4 +27,8 @@ def readgr_list(path: str, tick: int) -> list[tuple[int, int]]:
 
 def readgr_nx(path: str, tick: int) -> nx.DiGraph:
     edges = readgr_list(path, tick)
-    return nx.DiGraph(edges)
+    nodes = max([u for (u, _) in edges])
+    G = nx.DiGraph()
+    G.add_nodes_from(range(nodes))
+    G.add_edges_from(edges)
+    return G
