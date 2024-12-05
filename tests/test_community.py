@@ -37,6 +37,12 @@ def test_getOpinionBasedCommunity():
         {2},
     ]
 
+    opinions = [
+        [0.715], [0.571], [0.643], [0.357], [0.214], [0.143], [0.5],
+        [0.0], [0.28]
+    ]
+    assert len(community.getOpinionBasedCommunity(opinions)) == 6
+
 def test_averageEdgesBetweenCommunities():
     communities = [
         {0, 1, 2},

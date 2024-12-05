@@ -26,7 +26,7 @@ def getOpinionBasedCommunity(ops: list[list[float]] | list[float], eps: float = 
     """
     twodim_ops = ops if type(ops[0]) == list else [o for o in ops]
     pdist_ops = pdist(twodim_ops, metric="euclidean")
-    id2cluster = fcluster(linkage(pdist_ops, 'ward'), t=eps, criterion="distance")
+    id2cluster = fcluster(linkage(pdist_ops, 'complete'), t=eps, criterion="distance")
     coms = {}
     for i in range(len(ops)):
         clsid = id2cluster[i]
