@@ -49,6 +49,9 @@ def find[T](xs: list[T], cond: Callable[[T], bool]) -> int:
             return idx
     return -1
 
+def getEdgesBetweenDifferentCommunities(coms: list[set[int]], edges: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    return [(u, v) for (u, v) in edges if find(coms, lambda com: u in com) != find(coms, lambda com: v in com)]
+
 def averageEdgesBetweenCommunities(coms: list[set[int]], edges: list[tuple[int, int]]) -> float:
     """
     Returns the average edges between communities.
@@ -56,10 +59,5 @@ def averageEdgesBetweenCommunities(coms: list[set[int]], edges: list[tuple[int, 
     """
     if len(coms) == 1:
         return float('inf')
-    
-    cnt = 0
-    for (u, v) in edges:
-        idx = find(coms, lambda com: u in com)
-        if v not in coms[idx]:
-            cnt += 1
-    return cnt / len(coms) / (len(coms) - 1)
+
+    return len(getEdgesBetweenDifferentCommunities(coms, edges)) / len(coms) / (len(coms) - 1)
