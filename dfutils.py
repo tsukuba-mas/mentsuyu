@@ -8,15 +8,20 @@ def diff(df1: pd.DataFrame, df2: pd.DataFrame, on: list[str]) -> pd.DataFrame:
 # with showAll():
 #    display(df)
 class ShowAll():
-    key = "display.max_columns"
+    keys = [
+        "display.max_columns",
+        "display.max_rows",
+    ]
 
     def __init__(self, m: int = 1000000000):
         self.m = m
-        self.current = None
+        self.current = {k: None for k in self.keys}
     
     def __enter__(self):
-        self.current = pd.get_option(self.key)
-        pd.set_option(self.key, self.m)
+        self.current = {k: pd.get_option(k) for k in self.keys}
+        for k in self.keys:
+            pd.set_option(k, self.m)
     
     def __exit__(self, exc_type, exc_value, traceback):
-        pd.set_option(self.key, self.current)
+        for key, val in self.current.items():
+            pd.set_option(key, val)
