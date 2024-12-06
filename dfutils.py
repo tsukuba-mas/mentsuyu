@@ -18,5 +18,5 @@ class ShowAll():
         self.current = pd.get_option(self.key)
         pd.set_option(self.key, self.m)
     
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_value, traceback):
         pd.set_option(self.key, self.current)
