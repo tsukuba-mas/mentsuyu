@@ -24,7 +24,7 @@ def getOpinionBasedCommunity(ops: list[list[float]] | list[float], eps: float = 
     Each communities satisfy that the maximal distance between opinions over the members is `eps`.
     Communities are sorted with respect to the number of members in descendent order.
     """
-    twodim_ops = ops if type(ops[0]) == list else [o for o in ops]
+    twodim_ops = ops if type(ops[0]) == list else [[o] for o in ops]
     pdist_ops = pdist(twodim_ops, metric="euclidean")
     id2cluster = fcluster(linkage(pdist_ops, 'complete'), t=eps, criterion="distance")
     coms = {}
