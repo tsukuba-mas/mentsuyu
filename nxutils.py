@@ -21,7 +21,7 @@ def drawWithBeliefs(
     palette: list[str],
 ):
     assert len(set(beliefs)) <= len(palette), f"More color needed to show {len(set(beliefs))} beliefs"
-    bel2color = {b, palette[i] for i, b in enumerate(set(beliefs))}
+    bel2color = {b: palette[i] for i, b in enumerate(set(beliefs))}
     colors = [bel2color[b] for b in beliefs]
     pos = nx.spring_layout(G)
     nx.draw(G, pos=pos, node_color=colors)
