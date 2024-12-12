@@ -15,3 +15,13 @@ def drawWithOpinions(
     colors = [mix(lowest, highest, o) for o in opinions]
     pos = nx.spring_layout(G)
     nx.draw(G, pos=pos, node_color=colors)
+
+def drawWithBeliefs(
+    G: nx.DiGraph, beliefs: list[str],
+    palette: list[str],
+):
+    assert len(set(beliefs)) <= len(palette), f"More color needed to show {len(set(beliefs))} beliefs"
+    bel2color = {b, palette[i] for i, b in enumerate(set(beliefs))}
+    colors = [bel2color[b] for b in beliefs]
+    pos = nx.spring_layout(G)
+    nx.draw(G, pos=pos, node_color=colors)
