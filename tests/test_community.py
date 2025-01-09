@@ -55,4 +55,4 @@ def test_averageEdgesBetweenCommunities():
         (1, 3), {3, 5}
     ]
     actual = community.averageEdgesBetweenCommunities(communities, edges)
-    assert abs(actual - 2 / 6) <= 1e-5
+    assert abs(actual - 2 / 3) <= 1e-5

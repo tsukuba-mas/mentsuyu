@@ -55,9 +55,5 @@ def getEdgesBetweenDifferentCommunities(coms: list[set[int]], edges: list[tuple[
 def averageEdgesBetweenCommunities(coms: list[set[int]], edges: list[tuple[int, int]]) -> float:
     """
     Returns the average edges between communities.
-    If the number of communities is 1, float('inf') is returned.
     """
-    if len(coms) == 1:
-        return float('inf')
-
-    return len(getEdgesBetweenDifferentCommunities(coms, edges)) / len(coms) / (len(coms) - 1)
+    return len(getEdgesBetweenDifferentCommunities(coms, edges)) / len(coms)
