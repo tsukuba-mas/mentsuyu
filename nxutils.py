@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import numpy as np
 
 def mix(low: tuple[int, int, int], high: tuple[int, int, int], rat: float) -> str:
     mixed = (
@@ -18,6 +19,40 @@ def drawWithOpinions(
         _ = plt.figure(figsize=figsize)
     colors = [mix(lowest, highest, o) for o in opinions]
     pos = nx.spring_layout(G)
+    nx.draw(G, pos=pos, node_color=colors)
+
+def radianLists(n: int) -> list[float]:
+    ## Returns the list of radians 0, 2π/n, 4π/n, ..., 2(n-1)π/n.
+    return [2 * np.pi * i / n for i in range(n)]
+
+def buildOrders(swap: list[(int, int)], l: int) -> list[int]:
+    ## Returns the order of each components with respect to `swap`.
+    result = list(range(l))
+    for (x, y) in swap:
+        result[x], result[y] = result[y], result[x]
+    return result
+
+def drawWithOpinionsWithRotating(
+    G: nx.DiGraph, opinions: list[float],
+    lowest = (0, 0, 255), highest = (255, 0, 0),
+    figsize=None,
+    radius=1.0,
+    swap:list[(int, int)]=[],
+):
+    ## Draw network with opinions.
+    ## Each opinions are represented as colors of the nodes correspond to each agents.
+    if figsize is not None:
+        _ = plt.figure(figsize=figsize)
+    colors = [mix(lowest, highest, o) for o in opinions]
+    components = list(nx.strongly_connected_components(G))
+    order = buildOrders(swap, len(components))
+    centers = [(radius * np.cos(rad), radius * np.sin(rad)) for rad in radianLists(len(components))]
+    pos = {}
+    for component in components:
+        subpos = nx.spring_layout(G.subgraph(component))
+        for v, p in subpos.items():
+            cx, cy = centers[order[v]]
+            pos[v] = (centers[cx][0] + p[0], centers[cy][1] + p[1])
     nx.draw(G, pos=pos, node_color=colors)
 
 def drawWithBeliefs(
