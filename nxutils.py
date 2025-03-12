@@ -1,4 +1,5 @@
 import networkx as nx
+import matplotlib.pyplot as plt
 
 def mix(low: tuple[int, int, int], high: tuple[int, int, int], rat: float) -> str:
     mixed = (
@@ -10,8 +11,11 @@ def mix(low: tuple[int, int, int], high: tuple[int, int, int], rat: float) -> st
 
 def drawWithOpinions(
     G: nx.DiGraph, opinions: list[float],
-    lowest = (0, 0, 255), highest = (255, 0, 0)
+    lowest = (0, 0, 255), highest = (255, 0, 0),
+    figsize=None,
 ):
+    if figsize is not None:
+        _ = plt.figure(figsize=figsize)
     colors = [mix(lowest, highest, o) for o in opinions]
     pos = nx.spring_layout(G)
     nx.draw(G, pos=pos, node_color=colors)
