@@ -52,7 +52,7 @@ def drawWithOpinionsWithRotating(
         subpos = nx.spring_layout(G.subgraph(component))
         for v, p in subpos.items():
             cx, cy = centers[order[v]]
-            pos[v] = (centers[cx][0] + p[0], centers[cy][1] + p[1])
+            pos[v] = (cx + p[0], cy + p[1])
     nx.draw(G, pos=pos, node_color=colors)
 
 def drawWithBeliefs(
