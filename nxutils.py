@@ -48,10 +48,10 @@ def drawWithOpinionsWithRotating(
     order = buildOrders(swap, len(components))
     centers = [(radius * np.cos(rad), radius * np.sin(rad)) for rad in radianLists(len(components))]
     pos = {}
-    for component in components:
+    for idx, component in enumerate(components):
         subpos = nx.spring_layout(G.subgraph(component))
         for v, p in subpos.items():
-            cx, cy = centers[order[v]]
+            cx, cy = centers[order[idx]]
             pos[v] = (cx + p[0], cy + p[1])
     nx.draw(G, pos=pos, node_color=colors)
 
