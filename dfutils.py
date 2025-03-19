@@ -5,9 +5,9 @@ from IPython.display import display
 def diff(df1: pd.DataFrame, df2: pd.DataFrame, on: list[str]) -> pd.DataFrame:
     return pd.merge(df1, df2, on=on, how ="outer", indicator=True).query(f'_merge != "both"')
 
-def plot_with_errorbar(dataframe: pd.DataFrame, measure: str, xlabel: str, ylabel: str):
-     ddf = dataframe.groupby([measure])["bar"].agg(["mean", "std"])
-     plt.errorbar(ddf.index, ddf["mean"], yerr=ddf["std"], color="red")
+def plot_with_errorbar(dataframe: pd.DataFrame, groupby: str, measure: str, xlabel: str, ylabel: str, color="blue"):
+     ddf = dataframe.groupby([groupby])[measure].agg(["mean", "std"])
+     plt.errorbar(ddf.index, ddf["mean"], yerr=ddf["std"], color=color)
      plt.xlabel(xlabel)
      plt.ylabel(ylabel)
     
