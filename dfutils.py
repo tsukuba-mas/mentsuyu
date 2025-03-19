@@ -1,7 +1,19 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import display
 
 def diff(df1: pd.DataFrame, df2: pd.DataFrame, on: list[str]) -> pd.DataFrame:
     return pd.merge(df1, df2, on=on, how ="outer", indicator=True).query(f'_merge != "both"')
+
+def plot_with_errorbar(dataframe: pd.DataFrame, measure: str, xlabel: str, ylabel: str):
+     ddf = dataframe.groupby([measure])["bar"].agg(["mean", "std"])
+     plt.errorbar(ddf.index, ddf["mean"], yerr=ddf["std"], color="red")
+     plt.xlabel(xlabel)
+     plt.ylabel(ylabel)
+    
+def df_to_heatmap(dataframe: pd.DataFrame, index: str, column: str, value: str, aggfunc="mean"):
+    ddf = dataframe.pivot_table(index=index, columns=column, values=value, aggfunc=aggfunc)
+    display(ddf.style.background_gradient(axis=None))
 
 # to show all of the dataframe columns
 # Example:
