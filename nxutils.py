@@ -1,6 +1,11 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
+import hashlib
+
+def value_to_color(val: str) -> str:
+    hexcode = hashlib.sha256(val.encode()).hexdigest()
+    return f"#{hexcode[:6]}"
 
 def mix(low: tuple[int, int, int], high: tuple[int, int, int], rat: float) -> str:
     mixed = (
@@ -14,11 +19,12 @@ def drawWithOpinions(
     G: nx.DiGraph, opinions: list[float],
     lowest = (0, 0, 255), highest = (255, 0, 0),
     figsize=None,
+    seed=42,
 ):
     if figsize is not None:
         _ = plt.figure(figsize=figsize)
     colors = [mix(lowest, highest, o) for o in opinions]
-    pos = nx.spring_layout(G)
+    pos = nx.spring_layout(G, seed=seed)
     nx.draw(G, pos=pos, node_color=colors)
 
 def radianLists(n: int) -> list[float]:
@@ -57,10 +63,18 @@ def drawWithOpinionsWithRotating(
 
 def drawWithBeliefs(
     G: nx.DiGraph, beliefs: list[str],
-    palette: list[str],
+    palette: list[str] = [],
+    colormaps: dict[str, str] = {},
+    seed: int = 42,
 ):
-    assert len(set(beliefs)) <= len(palette), f"More color needed to show {len(set(beliefs))} beliefs"
-    bel2color = {b: palette[i] for i, b in enumerate(set(beliefs))}
+    bel2color = {}
+    if len(palette) > 0:
+        assert len(set(beliefs)) <= len(palette), f"More color needed to show {len(set(beliefs))} beliefs"
+        bel2color = {b: palette[i] for i, b in enumerate(set(beliefs))}
+    elif len(colormaps) > 0:
+        bel2color = colormaps
+    else:
+        bel2color = {b: value_to_color(b) for b in set(beliefs)}
     colors = [bel2color[b] for b in beliefs]
-    pos = nx.spring_layout(G)
+    pos = nx.spring_layout(G, seed=seed)
     nx.draw(G, pos=pos, node_color=colors)
