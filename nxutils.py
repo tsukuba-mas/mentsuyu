@@ -44,18 +44,20 @@ def drawWithOpinionsWithRotating(
     figsize=None,
     radius=1.0,
     swap:list[(int, int)]=[],
+    seed: int = 42,
 ):
     ## Draw network with opinions.
     ## Each opinions are represented as colors of the nodes correspond to each agents.
     if figsize is not None:
         _ = plt.figure(figsize=figsize)
+    rng = np.random.default_rng(seed=seed)
     colors = [mix(lowest, highest, o) for o in opinions]
     components = list(nx.strongly_connected_components(G))
     order = buildOrders(swap, len(components))
     centers = [(radius * np.cos(rad), radius * np.sin(rad)) for rad in radianLists(len(components))]
     pos = {}
     for idx, component in enumerate(components):
-        subpos = nx.spring_layout(G.subgraph(component))
+        subpos = nx.spring_layout(G.subgraph(component), seed=rng.integers(low=1))
         for v, p in subpos.items():
             cx, cy = centers[order[idx]]
             pos[v] = (cx + p[0], cy + p[1])
@@ -90,11 +92,13 @@ def drawWithBeliefsWithRotating(
     radius=1.0,
     swap:list[(int, int)]=[],
     colormaps: dict[str, str] = {},
+    seed: int = 42,
 ):
     ## Draw network with beliefs.
     ## Each beliefs are represented as colors of the nodes correspond to each agents.
     if figsize is not None:
         _ = plt.figure(figsize=figsize)
+    rng = np.random.default_rng(seed=seed)
     bel2color = get_belief_palette(palette, beliefs, colormaps)
     colors = [bel2color[b] for b in beliefs]
     components = list(nx.strongly_connected_components(G))
@@ -102,7 +106,7 @@ def drawWithBeliefsWithRotating(
     centers = [(radius * np.cos(rad), radius * np.sin(rad)) for rad in radianLists(len(components))]
     pos = {}
     for idx, component in enumerate(components):
-        subpos = nx.spring_layout(G.subgraph(component))
+        subpos = nx.spring_layout(G.subgraph(component), seed=rng.integers(low=1))
         for v, p in subpos.items():
             cx, cy = centers[order[idx]]
             pos[v] = (cx + p[0], cy + p[1])
