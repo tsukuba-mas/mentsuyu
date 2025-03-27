@@ -61,12 +61,7 @@ def drawWithOpinionsWithRotating(
             pos[v] = (cx + p[0], cy + p[1])
     nx.draw(G, pos=pos, node_color=colors)
 
-def drawWithBeliefs(
-    G: nx.DiGraph, beliefs: list[str],
-    palette: list[str] = [],
-    colormaps: dict[str, str] = {},
-    seed: int = 42,
-):
+def get_belief_palette(palette: list[str], beliefs: list[str], colormaps: dict[str, str]):
     bel2color = {}
     if len(palette) > 0:
         assert len(set(beliefs)) <= len(palette), f"More color needed to show {len(set(beliefs))} beliefs"
@@ -75,6 +70,40 @@ def drawWithBeliefs(
         bel2color = colormaps
     else:
         bel2color = {b: value_to_color(b) for b in set(beliefs)}
+    return bel2color
+
+def drawWithBeliefs(
+    G: nx.DiGraph, beliefs: list[str],
+    palette: list[str] = [],
+    colormaps: dict[str, str] = {},
+    seed: int = 42,
+):
+    bel2color = get_belief_palette(palette, beliefs, colormaps)
     colors = [bel2color[b] for b in beliefs]
     pos = nx.spring_layout(G, seed=seed)
+    nx.draw(G, pos=pos, node_color=colors)
+
+def drawWithBeliefsWithRotating(
+    G: nx.DiGraph, beliefs: list[str],
+    palette: list[str] = [],
+    figsize=None,
+    radius=1.0,
+    swap:list[(int, int)]=[],
+    colormaps: dict[str, str] = {},
+):
+    ## Draw network with beliefs.
+    ## Each beliefs are represented as colors of the nodes correspond to each agents.
+    if figsize is not None:
+        _ = plt.figure(figsize=figsize)
+    bel2color = get_belief_palette(palette, beliefs, colormaps)
+    colors = [bel2color[b] for b in beliefs]
+    components = list(nx.strongly_connected_components(G))
+    order = buildOrders(swap, len(components))
+    centers = [(radius * np.cos(rad), radius * np.sin(rad)) for rad in radianLists(len(components))]
+    pos = {}
+    for idx, component in enumerate(components):
+        subpos = nx.spring_layout(G.subgraph(component))
+        for v, p in subpos.items():
+            cx, cy = centers[order[idx]]
+            pos[v] = (cx + p[0], cy + p[1])
     nx.draw(G, pos=pos, node_color=colors)
