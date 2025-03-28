@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import hashlib
 
+RNG_UPPER_BOUND = pow(2, 63)
+RNG_LOWER_BOUND = 1
+
 def value_to_color(val: str) -> str:
     hexcode = hashlib.sha256(val.encode()).hexdigest()
     return f"#{hexcode[:6]}"
@@ -57,7 +60,7 @@ def drawWithOpinionsWithRotating(
     centers = [(radius * np.cos(rad), radius * np.sin(rad)) for rad in radianLists(len(components))]
     pos = {}
     for idx, component in enumerate(components):
-        subpos = nx.spring_layout(G.subgraph(component), seed=rng.integers(low=1))
+        subpos = nx.spring_layout(G.subgraph(component), seed=rng.integers(low=RNG_LOWER_BOUND, high=RNG_UPPER_BOUND))
         for v, p in subpos.items():
             cx, cy = centers[order[idx]]
             pos[v] = (cx + p[0], cy + p[1])
@@ -106,7 +109,7 @@ def drawWithBeliefsWithRotating(
     centers = [(radius * np.cos(rad), radius * np.sin(rad)) for rad in radianLists(len(components))]
     pos = {}
     for idx, component in enumerate(components):
-        subpos = nx.spring_layout(G.subgraph(component), seed=rng.integers(low=1))
+        subpos = nx.spring_layout(G.subgraph(component), seed=rng.integers(low=RNG_LOWER_BOUND, high=RNG_UPPER_BOUND))
         for v, p in subpos.items():
             cx, cy = centers[order[idx]]
             pos[v] = (cx + p[0], cy + p[1])
