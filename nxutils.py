@@ -60,7 +60,8 @@ def drawWithOpinionsWithRotating(
     centers = [(radius * np.cos(rad), radius * np.sin(rad)) for rad in radianLists(len(components))]
     pos = {}
     for idx, component in enumerate(components):
-        subpos = nx.spring_layout(G.subgraph(component), seed=rng.integers(low=RNG_LOWER_BOUND, high=RNG_UPPER_BOUND))
+        current_seed = int(rng.integers(low=RNG_LOWER_BOUND, high=RNG_UPPER_BOUND))
+        subpos = nx.spring_layout(G.subgraph(component), seed=current_seed)
         for v, p in subpos.items():
             cx, cy = centers[order[idx]]
             pos[v] = (cx + p[0], cy + p[1])
@@ -109,7 +110,8 @@ def drawWithBeliefsWithRotating(
     centers = [(radius * np.cos(rad), radius * np.sin(rad)) for rad in radianLists(len(components))]
     pos = {}
     for idx, component in enumerate(components):
-        subpos = nx.spring_layout(G.subgraph(component), seed=rng.integers(low=RNG_LOWER_BOUND, high=RNG_UPPER_BOUND))
+        current_seed = int(rng.integers(low=RNG_LOWER_BOUND, high=RNG_UPPER_BOUND))
+        subpos = nx.spring_layout(G.subgraph(component), seed=current_seed)
         for v, p in subpos.items():
             cx, cy = centers[order[idx]]
             pos[v] = (cx + p[0], cy + p[1])
