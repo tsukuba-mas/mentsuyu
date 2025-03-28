@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import hashlib
 
-RNG_UPPER_BOUND = pow(2, 63)
+RNG_UPPER_BOUND = pow(2, 20)
 RNG_LOWER_BOUND = 1
 
 def value_to_color(val: str) -> str:
