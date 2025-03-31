@@ -8,25 +8,52 @@ def makeDfColumn0origin(raw: pd.DataFrame) -> pd.DataFrame:
     df.columns = list(range(df.shape[1]))
     return df
 
-def readop(path: str) -> pd.DataFrame:
-    df = pd.read_csv(path, index_col=0, header=None)
+def readop(
+    path: str,
+    *,
+    resdir: str = "results",
+    exp: str = "",
+    opid: int = 0,
+) -> pd.DataFrame:
+    filepath = f"{resdir}/{exp}/ophist{opid}.csv" if len(exp) > 0 else path
+    df = pd.read_csv(filepath, index_col=0, header=None)
     return makeDfColumn0origin(df)
 
-def readbel(path: str) -> pd.DataFrame:
-    df = pd.read_csv(path, index_col=0, header=None, dtype=str)
+def readbel(
+    path: str,
+    *,
+    resdir: str = "results",
+    exp: str = "",
+) -> pd.DataFrame:
+    filepath = f"{resdir}/{exp}/belhist.csv" if len(exp) > 0 else path
+    df = pd.read_csv(filepath, index_col=0, header=None, dtype=str)
     df.index = df.index.astype(int)
     return makeDfColumn0origin(df)
 
-def readgr_list(path: str, tick: int) -> list[tuple[int, int]]:
+def readgr_list(
+    path: str, 
+    tick: int,
+    *,
+    resdir: str = "results",
+    exp: str = "",
+) -> list[tuple[int, int]]:
+    filepath = f"{resdir}/{exp}/grhist.csv" if len(exp) > 0 else path
+
     # line number is 1-indexed
-    if not os.path.exists(path):
-        raise OSError(f"File {path} does not exist.")
-    us = linecache.getline(path, 1).split(",")[1:] # remove tick
-    vs = linecache.getline(path, tick + 2).split(",")[1:]
+    if not os.path.exists(filepath):
+        raise OSError(f"File {filepath} does not exist.")
+    us = linecache.getline(filepath, 1).split(",")[1:] # remove tick
+    vs = linecache.getline(filepath, tick + 2).split(",")[1:]
     return [(int(u), int(v)) for (u, v) in zip(us, vs)]
 
-def readgr_nx(path: str, tick: int) -> nx.DiGraph:
-    edges = readgr_list(path, tick)
+def readgr_nx(
+    path: str, 
+    tick: int,
+    *,
+    resdir: str = "results",
+    exp: str = "",
+) -> nx.DiGraph:
+    edges = readgr_list(resdir=resdir, exp=exp, tick=tick)
     nodes = max([u for (u, _) in edges])
     G = nx.DiGraph()
     G.add_nodes_from(range(nodes))
