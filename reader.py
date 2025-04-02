@@ -9,7 +9,7 @@ def makeDfColumn0origin(raw: pd.DataFrame) -> pd.DataFrame:
     return df
 
 def readop(
-    path: str,
+    path: str = "",  # For backward compatibility ...
     *,
     resdir: str = "results",
     exp: str = "",
@@ -20,7 +20,7 @@ def readop(
     return makeDfColumn0origin(df)
 
 def readbel(
-    path: str,
+    path: str = "",
     *,
     resdir: str = "results",
     exp: str = "",
@@ -31,8 +31,8 @@ def readbel(
     return makeDfColumn0origin(df)
 
 def readgr_list(
-    path: str, 
-    tick: int,
+    path: str = "", 
+    tick: int = 0,
     *,
     resdir: str = "results",
     exp: str = "",
@@ -47,13 +47,13 @@ def readgr_list(
     return [(int(u), int(v)) for (u, v) in zip(us, vs)]
 
 def readgr_nx(
-    path: str, 
-    tick: int,
+    path: str = "", 
+    tick: int = 0,
     *,
     resdir: str = "results",
     exp: str = "",
 ) -> nx.DiGraph:
-    edges = readgr_list(resdir=resdir, exp=exp, tick=tick)
+    edges = readgr_list(path=path, resdir=resdir, exp=exp, tick=tick)
     nodes = max([u for (u, _) in edges])
     G = nx.DiGraph()
     G.add_nodes_from(range(nodes))
