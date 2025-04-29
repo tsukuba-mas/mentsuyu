@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from IPython.display import display
+from collections.abc import Callable
+import os
 
 def diff(df1: pd.DataFrame, df2: pd.DataFrame, on: list[str]) -> pd.DataFrame:
     return pd.merge(df1, df2, on=on, how ="outer", indicator=True).query(f'_merge != "both"')
@@ -14,6 +16,18 @@ def plot_with_errorbar(dataframe: pd.DataFrame, groupby: str, measure: str, xlab
 def df_to_heatmap(dataframe: pd.DataFrame, index: str, column: str, value: str, aggfunc="mean"):
     ddf = dataframe.pivot_table(index=index, columns=column, values=value, aggfunc=aggfunc)
     display(ddf.style.background_gradient(axis=None))
+
+def load_df(csv_path: str, callback: Callable[[], pd.DataFrame], index_col=0) -> pd.DataFrame:
+    """
+    Build Pandas DataFrame from `csv_path` if it exists;
+    otherwise build it by executing `callback` and save it to `csv_path`.
+    """
+    if os.path.exists(csv_path):
+        return pd.read_csv(csv_path, index_col=index_col)
+    else:
+        result = callback()
+        result.to_csv(csv_path)
+        return result
 
 # to show all of the dataframe columns
 # Example:
