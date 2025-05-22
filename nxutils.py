@@ -24,12 +24,13 @@ def drawWithOpinions(
     figsize=None,
     seed=42,
     font_size: int = 12,
+    with_labels: bool = False,
 ):
     if figsize is not None:
         _ = plt.figure(figsize=figsize)
     colors = [mix(lowest, highest, o) for o in opinions]
     pos = nx.spring_layout(G, seed=seed)
-    nx.draw(G, pos=pos, node_color=colors, font_size=font_size)
+    nx.draw(G, pos=pos, node_color=colors, font_size=font_size, with_labels=with_labels)
 
 def radianLists(n: int) -> list[float]:
     ## Returns the list of radians 0, 2π/n, 4π/n, ..., 2(n-1)π/n.
@@ -50,6 +51,7 @@ def drawWithOpinionsWithRotating(
     swap:list[(int, int)]=[],
     seed: int = 42,
     font_size: int = 12,
+    with_labels: bool = False,
 ):
     ## Draw network with opinions.
     ## Each opinions are represented as colors of the nodes correspond to each agents.
@@ -67,7 +69,7 @@ def drawWithOpinionsWithRotating(
         for v, p in subpos.items():
             cx, cy = centers[order[idx]]
             pos[v] = (cx + p[0], cy + p[1])
-    nx.draw(G, pos=pos, node_color=colors, font_size=font_size)
+    nx.draw(G, pos=pos, node_color=colors, font_size=font_size, with_labels=with_labels)
 
 def get_belief_palette(palette: list[str], beliefs: list[str], colormaps: dict[str, str]):
     bel2color = {}
@@ -86,11 +88,12 @@ def drawWithBeliefs(
     colormaps: dict[str, str] = {},
     seed: int = 42,
     font_size: int = 12,
+    with_labels: bool = False,
 ):
     bel2color = get_belief_palette(palette, beliefs, colormaps)
     colors = [bel2color[b] for b in beliefs]
     pos = nx.spring_layout(G, seed=seed)
-    nx.draw(G, pos=pos, node_color=colors, font_size=font_size)
+    nx.draw(G, pos=pos, node_color=colors, font_size=font_size, with_labels=with_labels)
 
 def drawWithBeliefsWithRotating(
     G: nx.DiGraph, beliefs: list[str],
@@ -101,6 +104,7 @@ def drawWithBeliefsWithRotating(
     colormaps: dict[str, str] = {},
     seed: int = 42,
     font_size: int = 12,
+    with_labels: bool = False,
 ):
     ## Draw network with beliefs.
     ## Each beliefs are represented as colors of the nodes correspond to each agents.
@@ -119,4 +123,4 @@ def drawWithBeliefsWithRotating(
         for v, p in subpos.items():
             cx, cy = centers[order[idx]]
             pos[v] = (cx + p[0], cy + p[1])
-    nx.draw(G, pos=pos, node_color=colors, font_size=font_size)
+    nx.draw(G, pos=pos, node_color=colors, font_size=font_size, with_labels=with_labels)
